@@ -1,0 +1,7 @@
+{
+  "data": [
+    { "input": "question: Da li je dostava besplatna? context: Naša prodavnica nudi besplatnu dostavu za sve porudžbine preko 3000 dinara.", "target": "Da, za porudžbine preko 3000 dinara." },
+    { "input": "question: Kada radi vaša prodavnica? context: Radno vreme naše prodavnice je od 9 do 21 čas svakog dana.", "target": "od 9 do 21 čas svakog dana" },
+    { "input": "question: Kako mogu da vratim proizvod? context: Povraćaj robe je moguć u roku od 14 dana uz fiskalni račun.", "target": "u roku od 14 dana uz fiskalni račun" }
+  ]
+}
