@@ -1,7 +1,12 @@
 {
   "data": [
-    { "input": "question: Da li je dostava besplatna? context: Naša prodavnica nudi besplatnu dostavu za sve porudžbine preko 3000 dinara.", "target": "Da, za porudžbine preko 3000 dinara." },
-    { "input": "question: Kada radi vaša prodavnica? context: Radno vreme naše prodavnice je od 9 do 21 čas svakog dana.", "target": "od 9 do 21 čas svakog dana" },
-    { "input": "question: Kako mogu da vratim proizvod? context: Povraćaj robe je moguć u roku od 14 dana uz fiskalni račun.", "target": "u roku od 14 dana uz fiskalni račun" }
+    { "input": "question: Koliki je trošak isporuke proizvoda? context: Cena isporuke proizvoda zavisi od vrednosti porudžbine: Za porudžbine do 3.999 dinara: 490 dinara Za porudžbine od 4.000 do 9.999 dinara: 590 dinara Za porudžbine od 10.000 do 14.999 dinara: 690 dinara Za porudžbine 15.000 do 19.999 dinara: 790 dinara Za porudžbine preko 20.000 dinara: 890 dinara.", "target": "Za porudžbine do 3.999 dinara: 490 dinara Za porudžbine od 4.000 do 9.999 dinara: 590 dinara Za porudžbine od 10.000 do 14.999 dinara: 690 dinara Za porudžbine 15.000 do 19.999 dinara: 790 dinara Za porudžbine preko 20.000 dinara: 890 dinara." },
+    { "input": "question: Koje Vam je radno vreme? context: Radno vreme naše prodavnice je radnim danima od 9 do 15 časova.", "target": "radnim danima od 9 do 15 časova" },
+    { "input": "question: Da li postoji mogućnost vraćanja proizvoda? context: Povraćaj proizvoda je moguć u roku od 14 dana uz fiskalni račun.", "target": "u roku od 14 dana uz fiskalni račun" },
+    { "input": "question: Koji je rok isporuke proizvoda? context: Rok isporuke je 2-5 radnih dana, najveći broj pošiljki se isporuči narednog dana", "target": "2-5 radnih dana, najveći broj pošiljki se isporuči narednog dana" },
+    { "input": "question: Na koji način mogu poručiti proizvode? context: Proizvode možete poručiti preko web sajta ili pozivom na telefon 063-277-596", "target": "preko web sajta ili pozivom na telefon 063-277-596" },
+    { "input": "question: Da li je moguće platiti pouzećem? context: Plaćanje pouzećem je moguće.", "target": "Plaćanje pouzećem je moguće." },
+    { "input": "question: Na koji način Vas mogu kontaktirati? context: Možete nas kontaktirati putem e-maila podrska@shoppy.rs ili telefonom na 063-277-596.", "target": "putem e-maila podrska@shoppy.rs ili telefonom na 063-277-596" },
+    { "input": "question: Da li imate prodavnicu ili maloprodajni objekat? context: Nemamo maloprodajni objekat, radimo samo online prodaju.", "target": "radimo samo online prodaju" }
   ]
 }

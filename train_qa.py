@@ -7,7 +7,7 @@ import tensorflow as tf
 data_files = {"train": "serbian_qa_mt5.json"}
 dataset = load_dataset("json", data_files=data_files, field="data")
 
-model_name = "google/mt5-base"
+model_name = "google/mt5-small"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = TFAutoModelForSeq2SeqLM.from_pretrained(model_name)
 
