@@ -1,18 +1,19 @@
-from transformers import pipeline
 from flask import Flask, request, jsonify
 import os
 from retriever import retrieve_context
+from transformers import AutoTokenizer, TFAutoModelForSeq2SeqLM
+import tensorflow as tf
 
 MODEL_DIR = "./serbian-mt5-qa-model"
 
 app = Flask(__name__)
 
 if os.path.exists(MODEL_DIR):
-    qa_pipeline = pipeline("text2text-generation",
-                           model=MODEL_DIR, tokenizer=MODEL_DIR, framework="tf")
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
+    model = TFAutoModelForSeq2SeqLM.from_pretrained(MODEL_DIR)
 else:
-    qa_pipeline = pipeline("text2text-generation",
-                           model="google/mt5-small", tokenizer="google/mt5-small", framework="tf")
+    tokenizer = AutoTokenizer.from_pretrained("google/mt5-small")
+    model = TFAutoModelForSeq2SeqLM.from_pretrained("google/mt5-small")
 
 
 @app.route("/qa", methods=["POST"])
@@ -21,18 +22,20 @@ def answer_question():
     question = data.get("question")
     if not question:
         return jsonify({"error": "Missing question"}), 400
-    
-    # Step 1: Try to answer as FAQ (no context)
-    input_text = f"question: {question} context: "
-    result = qa_pipeline(input_text, max_length=64, clean_up_tokenization_spaces=True)
-    answer = result[0]["generated_text"] if result and "generated_text" in result[0] else ""
 
-    # Step 2: If the answer is empty or generic, try with retrieved context
-    if not answer or answer.strip().lower() in ["", "i don't know", "unknown", "n/a", "not found", "no answer"]:
-        context = retrieve_context(question)
-        input_text = f"question: {question} context: {context if context else ''}"
-        result = qa_pipeline(input_text, max_length=64, clean_up_tokenization_spaces=True)
-        answer = result[0]["generated_text"] if result and "generated_text" in result[0] else ""
+    # Retrieve context from vector DB
+    context = retrieve_context(question)
+    input_text = f"question: {question} context: {context if context else ''}"
+
+    # Tokenize input
+    inputs = tokenizer(input_text, return_tensors="tf", truncation=True, padding=True)
+
+    # Generate output tokens
+    outputs = model.generate(**inputs, max_new_tokens=64)
+
+    # Decode to string
+    answer = tokenizer.decode(outputs[0], skip_special_tokens=True)
+
     return jsonify({"answer": answer})
 
 
