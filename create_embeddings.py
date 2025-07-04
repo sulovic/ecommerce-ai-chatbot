@@ -10,8 +10,8 @@ from bs4 import BeautifulSoup
 PRODUCT_CSV = 'products_data.csv'
 QA_JSON = 'serbian_qa.json'
 MODEL_NAME = "intfloat/multilingual-e5-small"
-INDEX_FILE = 'combined_index.faiss'
-METADATA_FILE = 'combined_metadata.json'
+INDEX_FILE = 'context_index.faiss'
+METADATA_FILE = 'context_metadata.json'
 
 # Load product data
 print("Loading products from CSV...")
@@ -78,7 +78,7 @@ embeddings = model.encode(all_texts, convert_to_numpy=True, normalize_embeddings
 # Build FAISS index
 dimension = embeddings.shape[1]
 print(f"Building FAISS index with dimension {dimension}...")
-index = faiss.IndexFlatIP(dimension)  # cosine similarity with normalized embeddings
+index = faiss.IndexFlatIP(dimension) 
 index.add(embeddings)
 
 # Save index and metadata
