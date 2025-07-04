@@ -1,18 +1,13 @@
 from flask import Flask, request, jsonify
-import os
 from retriever import retrieve_context
-from transformers import AutoTokenizer, TFAutoModelForSeq2SeqLM
+from transformers import pipeline
 
-MODEL_DIR = "./serbian-mt5-qa-model"
+
 
 app = Flask(__name__)
 
-if os.path.exists(MODEL_DIR):
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
-    model = TFAutoModelForSeq2SeqLM.from_pretrained(MODEL_DIR)
-else:
-    tokenizer = AutoTokenizer.from_pretrained("google/mt5-small")
-    model = TFAutoModelForSeq2SeqLM.from_pretrained("google/mt5-small")
+agent_pipeline = pipeline("question-answering", model="deepset/xlm-roberta-large-squad2")
+
 
 
 @app.route("/qa", methods=["POST"])
@@ -24,21 +19,36 @@ def answer_question():
 
     # Retrieve context from vector DB
     context = retrieve_context(question)
-    input_text = f"question: {question} context: {context if context else ''}"
+    print (f"Retrieved context: {context}")
+    if not context:
+        return jsonify({"error": "No relevant context found"}), 404
+    #Prepare context for input
+    context_text = """"""
+    if context["type"] == "qa":
+       context_text = f"""{context['answer']}"""
 
-    # Tokenize input
-    inputs = tokenizer(input_text, return_tensors="tf", truncation=True, padding=True)
+    if context["type"] == "product":
+        context_text = f"""
+        Naziv proizvoda: {context['name']}
+        Opis proizvoda: {context['description']}
+        SKU: {context['sku']}
+        URL: www.shoppy.rs/{context['url_key']}/
+        """
+
 
     # Generate output tokens
-    outputs = model.generate(**inputs, max_new_tokens=64)
+    result = agent_pipeline({
+        "question": question,
+        "context": context_text
+    })
 
     # Decode to string
-    answer = tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+    print (f"Model receives: {context_text} and outputs: {result}")
+    answer = result["answer"]
 
     return jsonify({"answer": answer})
 
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
-    print("Server is running on http://0.0.0.0:5000")
-    print("Use Ctrl+C to stop the server")
