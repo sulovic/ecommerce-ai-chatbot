@@ -6,7 +6,8 @@ from transformers import pipeline
 
 app = Flask(__name__)
 
-agent_pipeline = pipeline("question-answering", model="deepset/xlm-roberta-large-squad2")
+qa_pipeline = pipeline("question-answering", model="deepset/xlm-roberta-large-squad2")
+rephrase_pipeline = pipeline("text2text-generation", model="google/mt5-small", tokenizer="google/mt5-small")
 
 
 
@@ -22,6 +23,7 @@ def answer_question():
     print (f"Retrieved context: {context}")
     if not context:
         return jsonify({"error": "No relevant context found"}), 404
+    
     #Prepare context for input
     context_text = """"""
     if context["type"] == "qa":
@@ -35,17 +37,19 @@ def answer_question():
         URL: www.shoppy.rs/{context['url_key']}/
         """
 
-
-    # Generate output tokens
-    result = agent_pipeline({
+    result = qa_pipeline({
         "question": question,
         "context": context_text
     })
 
-    # Decode to string
+    raw_answer = result["answer"].strip()
 
-    print (f"Model receives: {context_text} and outputs: {result}")
-    answer = result["answer"]
+    answer = rephrase_pipeline(
+        f"Napiši odgovor na pitanje: {question} koristeći odgovor: {raw_answer}.",
+        max_new_tokens=64
+    )[0]["generated_text"]
+
+    print (f"Question: {question}, context: {context_text}, raw_answer: {raw_answer} and outputs: {answer}")
 
     return jsonify({"answer": answer})
 
