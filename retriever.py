@@ -1,12 +1,18 @@
-# retriever.py
 import json
 import faiss
 from sentence_transformers import SentenceTransformer
+import os
 
-INDEX_FILE = "context_index.faiss"
-METADATA_FILE = "context_metadata.json"
+INDEX_FILE = "./vector_store/context_index.faiss"
+METADATA_FILE = "./vector_store/context_metadata.json"
 EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-small"
 TOP_K = 1
+
+# Ensure index file exists and metadata file exists
+if not os.path.exists(INDEX_FILE):
+    raise FileNotFoundError(f"Index file not found: {INDEX_FILE}")
+if not os.path.exists(METADATA_FILE):   
+    raise FileNotFoundError(f"Metadata file not found: {METADATA_FILE}")
 
 # Load embedding model and FAISS index once
 embedding_model = SentenceTransformer(EMBEDDING_MODEL_NAME)

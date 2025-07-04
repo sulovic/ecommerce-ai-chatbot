@@ -1,7 +1,5 @@
-import os
 from datasets import load_dataset
 from transformers import AutoTokenizer, TFAutoModelForSeq2SeqLM, DataCollatorForSeq2Seq, TFTrainingArguments, TFTrainer
-import tensorflow as tf
 
 # Load dataset in the new format
 data_files = {"train": "serbian_qa_mt5.json"}

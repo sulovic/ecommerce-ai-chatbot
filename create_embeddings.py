@@ -1,20 +1,27 @@
 import pandas as pd
 import json
 import faiss
-import numpy as np
 from sentence_transformers import SentenceTransformer
 from bs4 import BeautifulSoup
+import os
 
 
 # Files & constants
-PRODUCT_CSV = 'products_data.csv'
-QA_JSON = 'serbian_qa.json'
+PRODUCT_CSV = './data/products_data.csv'
+QA_JSON = './data/serbian_qa.json'
 MODEL_NAME = "intfloat/multilingual-e5-small"
-INDEX_FILE = 'context_index.faiss'
-METADATA_FILE = 'context_metadata.json'
+INDEX_FILE = './vector_store/context_index.faiss'
+METADATA_FILE = './vector_store/context_metadata.json'
+
+# Ensure that row data files exist
+if not os.path.exists(PRODUCT_CSV):
+    raise FileNotFoundError(f"Product CSV file not found: {PRODUCT_CSV}")
+if not os.path.exists(QA_JSON):
+    raise FileNotFoundError(f"QA JSON file not found: {QA_JSON}")
 
 # Load product data
 print("Loading products from CSV...")
+
 df = pd.read_csv(PRODUCT_CSV, encoding='utf-8')
 
 product_texts = []

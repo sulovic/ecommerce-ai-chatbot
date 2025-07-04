@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify
 import os
 from retriever import retrieve_context
 from transformers import AutoTokenizer, TFAutoModelForSeq2SeqLM
-import tensorflow as tf
 
 MODEL_DIR = "./serbian-mt5-qa-model"
 
